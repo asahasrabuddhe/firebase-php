@@ -2,11 +2,15 @@
 
 namespace Kreait\Firebase\Auth;
 
+use Kreait\Firebase\Auth\UserInfo;
+
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 
 class User
 {
+    use UserInfo;
+    
     /**
      * @var Token
      */
