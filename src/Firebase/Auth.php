@@ -111,7 +111,7 @@ class Auth
     private function convertResponseToUser(ResponseInterface $response): User
     {
         $data = JSON::decode((string) $response->getBody(), true);
-
+        
         return User::create($data['idToken'], $data['refreshToken']);
     }
 }
