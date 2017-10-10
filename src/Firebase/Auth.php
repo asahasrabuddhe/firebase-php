@@ -81,6 +81,13 @@ class Auth
         return $this->convertResponseToUser($response);
     }
 
+    public function updateUserProfile(User $user, array $userInfo): User
+    {
+        $response = $this->client->updateUserProfile($user, $userInfo['displayName'], $userInfo['photoURL'], $userInfo['deleteAttribute']);
+
+        return $this->convertResponseToUser($response);
+    }
+
     public function deleteUser(User $user): void
     {
         $this->client->deleteUser($user);
