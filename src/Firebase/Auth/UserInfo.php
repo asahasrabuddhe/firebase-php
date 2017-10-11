@@ -47,7 +47,7 @@ trait UserInfo
      */
     public function getEmail(): string
     {
-        return $this->email;
+        return (string) $this->idToken->getClaim('email');
     }
 
     /**
