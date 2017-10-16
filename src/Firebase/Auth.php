@@ -85,7 +85,7 @@ class Auth
     {
         $response = $this->client->updateUserProfile($user, $userInfo['displayName'], $userInfo['photoURL'], $userInfo['deleteAttribute']);
 
-        return $this->convertResponseToUser($response);
+        return $this->convertResponseToUser($response, $user);
     }
 
     public function deleteUser(User $user): void
@@ -108,10 +108,17 @@ class Auth
         return $this->idTokenVerifier->verify($idToken);
     }
 
-    private function convertResponseToUser(ResponseInterface $response): User
+    private function convertResponseToUser(ResponseInterface $response, User $user = null): User
     {
         $data = JSON::decode((string) $response->getBody(), true);
-        
+
+        // NOTE: For some reason, the API does not return IdToken and RefreshToken for Update Profile. This is a work-around until we figure out why
+        // the tokens are not returned or until a better way is found instead of this.
+        if($user !== null) {
+            $user->update($data);
+            return $user;
+        }
+
         return User::create($data['idToken'], $data['refreshToken']);
     }
 }

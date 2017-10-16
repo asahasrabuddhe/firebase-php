@@ -113,7 +113,7 @@ class ApiClient
         ]);
     }
 
-    public function updateUserProfile($user, string $displayName = '', string $photoURL = '', array $deleteAttribute = []): ResponseInterface
+    public function updateUserProfile(User $user, string $displayName = '', string $photoURL = '', array $deleteAttribute = []): ResponseInterface
     {
         return $this->request('setAccountInfo', [
             'idToken' => (string) $user->getIdToken(),

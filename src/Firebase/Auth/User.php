@@ -29,6 +29,29 @@ class User
         $user->setIdToken($idToken);
         $user->setRefreshToken($refreshToken);
 
+        foreach($idToken->getClaims() as $key => $claim)
+        {
+            switch($key)
+            {
+                case 'user_id':
+                    $user->uid = (string) $user->idToken->getClaim('user_id');
+                    break;
+                case 'name':
+                    $user->setDisplayName((string) $user->idToken->getClaim('name'));
+                    break;
+                case 'picture':
+                    $user->setPhotoURL((string) $user->idToken->getClaim('email'));
+                    break;
+                case 'email':
+                    $user->setEmail((string) $user->idToken->getClaim('email'));
+                    break;
+                case 'firebase':
+                    $user->setProviderId($user->idToken->getClaim('firebase')->sign_in_provider);
+                default:
+                    break;
+            }
+        }
+
         return $user;
     }
 
@@ -48,7 +71,7 @@ class User
     public function getUid(): string
     {
         /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
-        return (string) $this->idToken->getClaim('user_id');
+        return $this->uid;
     }
 
     /**
@@ -65,5 +88,11 @@ class User
     public function getRefreshToken(): string
     {
         return $this->refreshToken;
+    }
+
+    public function update(array $data): void
+    {
+        $this->setDisplayName($data['displayName']);
+        $this->setPhotoURL($data['photoUrl']);
     }
 }
